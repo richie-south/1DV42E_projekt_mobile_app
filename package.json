@@ -1,0 +1,19 @@
+{
+  "name": "ivytown_react_native",
+  "version": "0.0.1",
+  "description": "react native app for course 1dv42e",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rs222kn/1DV42E_projekt_mobile_app.git"
+  },
+  "author": "richard soderman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rs222kn/1DV42E_projekt_mobile_app/issues"
+  },
+  "homepage": "https://github.com/rs222kn/1DV42E_projekt_mobile_app#readme"
+}
