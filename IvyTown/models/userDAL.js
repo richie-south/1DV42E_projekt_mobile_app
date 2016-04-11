@@ -55,7 +55,7 @@ export const createNewUser = (fbId, fbProfileImg, firstName, lastName) => {
 
         request.open('POST', 'http://194.47.105.68:3334/user/create', true);
         request.setRequestHeader('Content-type', 'application/text');
-        console.log(data);
+        //console.log(data);
         request.send(data);
     });
 };

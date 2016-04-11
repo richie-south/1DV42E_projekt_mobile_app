@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
 
 export default class Login extends React.Component{
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
     }
 
     getFbProfileImageUrl(fbId, token) {
@@ -105,7 +105,7 @@ export default class Login extends React.Component{
     }
 
     render() {
-        this.loadUserProps();
+        //this.loadUserProps();
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
