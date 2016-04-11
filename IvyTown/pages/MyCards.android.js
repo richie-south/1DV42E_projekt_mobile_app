@@ -14,7 +14,8 @@ import React, {
 
 import SwipeableViews from 'react-swipeable-views/lib/index.native.animated';
 import { Actions } from 'react-native-router-flux';
-import styles from './styles/MyCardsStyle';
+import styles from '../styles/MyCardsStyle';
+import Card from '../components/Card';
 
 /**
  * [handles card presses, had to put this outside of calss]
@@ -75,8 +76,7 @@ export default class MyCards extends Component{
         }
 
         return (
-
-            <SwipeableViews >
+            <SwipeableViews>
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={this.renderCard}
@@ -104,26 +104,7 @@ export default class MyCards extends Component{
 
     renderCard(card) {
       return (
-          <TouchableNativeFeedback
-              onPress={onCardPress.bind(null, card)}
-              background={TouchableNativeFeedback.SelectableBackground()}>
-
-              <View style={styles.card} >
-                <Image
-                  source={{uri: card.avatar}}
-                  style={styles.thumbnail}
-                />
-                <View style={styles.rightContainer}>
-                  <Text style={styles.name}>{card.name}</Text>
-                  <View>
-                      <Text style={styles.statsProperty}>Attack: {card.stats.attack}</Text>
-                      <Text style={styles.statsProperty}>Block: {card.stats.block}</Text>
-                      <Text style={styles.statsProperty}>Heal: {card.stats.heal}</Text>
-                  </View>
-                </View>
-              </View>
-
-          </TouchableNativeFeedback>
+          <Card card={card}/>
       );
     }
 }
