@@ -6,12 +6,19 @@ import React, {
 
 export default StyleSheet.create({
     container: {
+        
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'stretch',
+        alignItems: 'center',
         backgroundColor: '#F5FCFF',
-
     },
+
+    listView: {
+        paddingTop: 80,
+        paddingBottom: 50,
+        backgroundColor: '#F5FCFF'
+    },
+
     card: {
         flex: 1,
         alignSelf: 'center',
@@ -20,8 +27,8 @@ export default StyleSheet.create({
         marginBottom: 8,
         marginTop: 8,
         padding: 16,
-        height: 280,
-        width: 200
+        height: 220,
+        width: 160
     },
 
     rightContainer: {
@@ -49,12 +56,6 @@ export default StyleSheet.create({
         borderRadius: 50,
         width: 100,
         height: 100
-    },
-
-    listView: {
-        paddingTop: 80,
-        paddingBottom: 50,
-        backgroundColor: '#F5FCFF'
     },
 
     statsProperty: {
