@@ -30,13 +30,18 @@ const styles = StyleSheet.create({
 });
 
 // tokej
-// CAAHo1XAZAZAdABAPSQGcRAb2hjZB1KmoGurPHmOaY3KaqTmMs3iaiZCodpNYyQuRVS6ZCUR9G8v63vt0DBuMQ6IrA8UvfEEdp28mKmApvSDBxyZBnF221V0Bgjhud2ywMPlBRjTQOVSLhb6rZAF8vSFEV9Ty4vKfDI2s9ieBvDz1dR1DvyUWgGBnIAeEiUGcA6iSXm7dY2sKAZDZD
+// CAAHo1XAZAZAdABAPSQGcRAb2hjZB1KmoGurPHmOaY3KaqTmMs3iaiZCodpNYyQuRVS6ZCUR9G8v6
+// 3vt0DBuMQ6IrA8UvfEEdp28mKmApvSDBxyZBnF221V0Bgjhud2ywMPlBRjTQOVSLhb6rZAF8vSFEV9
+// Ty4vKfDI2s9ieBvDz1dR1DvyUWgGBnIAeEiUGcA6iSXm7dY2sKAZDZD
 // id//const id = '10206232596794517';
 
 export default class Login extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {
+            loaded: false
+        };
     }
 
     getFbProfileImageUrl(fbId, token) {
@@ -59,7 +64,6 @@ export default class Login extends React.Component{
                     reject(e);
                 }
             };
-            console.log(api);
             request.open('GET', api);
             request.send();
         });
@@ -74,7 +78,12 @@ export default class Login extends React.Component{
             .then(result => {
                 console.log('user saved props: ', result); // TODO: remove
                 if(result !== null){
-                    Actions.mycards({ data:result });
+                    setTimeout(() => {
+                        Actions.mycards({ data:result });
+                    }, 0);
+
+                }else{
+                    this.setState({loaded: true});
                 }
             })
             .catch(e => console.log(e));
@@ -104,8 +113,25 @@ export default class Login extends React.Component{
         }
     }
 
-    render() {
-        //this.loadUserProps();
+    render(){
+        if (!this.state.loaded) {
+            return this.renderLoadingView();
+        }
+
+        return this.renderLogin();
+    }
+
+    renderLoadingView(){
+        return (
+            <View style={styles.container}>
+              <Text>
+                Loading..
+              </Text>
+            </View>
+        );
+    }
+
+    renderLogin() {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
@@ -116,7 +142,6 @@ export default class Login extends React.Component{
 
                     onLogin={(data) => {
                         console.log('Logged in!: ', data);
-
                         userDAL.getUserCredentials(data.profile.id)
                         .then(result => {
                             if(result === null){
