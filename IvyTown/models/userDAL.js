@@ -1,5 +1,7 @@
 'use strict';
 
+import config from '../config';
+
 export const getUserCredentials = (fbId) => {
     console.log('getUserCredentials');
     return new Promise((resolve, reject) => {
@@ -19,7 +21,7 @@ export const getUserCredentials = (fbId) => {
             }
         };
 
-        request.open('GET', 'http://194.47.105.68:3334/user/'+fbId, true);
+        request.open('GET', config.url+'/user/'+fbId, true);
         request.send();
     });
 };
@@ -53,7 +55,7 @@ export const createNewUser = (fbId, fbProfileImg, firstName, lastName) => {
             }
         };
 
-        request.open('POST', 'http://194.47.105.68:3334/user/create', true);
+        request.open('POST', config.url+'/user/create', true);
         request.setRequestHeader('Content-type', 'application/text');
         //console.log(data);
         request.send(data);
@@ -77,7 +79,7 @@ export const getUserCards = (fbId) => {
             }
         };
 
-        request.open('GET', 'http://194.47.105.68:3334/user/cards/'+fbId, true);
+        request.open('GET', config.url+'/user/cards/'+fbId, true);
         request.send();
     });
 };
