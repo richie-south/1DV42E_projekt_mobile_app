@@ -12,11 +12,17 @@ import React, {
     TouchableNativeFeedback
 } from 'react-native';
 
-import ScrollableTabView from 'react-native-scrollable-tab-view';
 
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { Actions } from 'react-native-router-flux';
 import styles from '../styles/MyCardsStyle';
-import Card from '../components/Card';
+
+//import Card from '../components/Card';
+import LobbyCard from '../components/LobbyCard';
+import CardView from '../components/CardView';
+import GridView from 'react-native-grid-view';
+
+
 import config from '../config';
 
 // socket config fix
@@ -28,10 +34,7 @@ import io from 'socket.io-client/socket.io';
 const socket = io(config.url, {
     transports: ['websocket'], forceNew: true
 });
-/*
-const io = {};
-const socket = {};
-*/
+
 const onPress = (e) => {
     console.log(e);
 };
@@ -47,9 +50,7 @@ export default class MyCards extends Component{
             myCards: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
-            lobbyCards: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2,
-            }),
+            lobbyCards: [],
             loaded: false
         };
     }
@@ -102,8 +103,12 @@ export default class MyCards extends Component{
     socketLobbyUpdate(){
         socket.on('update', (cards) => {
             console.log('cards', cards);
+            let c = cards.map((card, index) => {
+                card.key = index+'c';
+                return card;
+            });
             this.setState({
-                lobbyCards: this.state.lobbyCards.cloneWithRows(cards)
+                lobbyCards: c
             });
         });
     }
@@ -143,7 +148,7 @@ export default class MyCards extends Component{
         }
 
         return (
-            <ScrollableTabView renderTabBar={false}>
+            <ScrollableTabView initialPage={2} renderTabBar={false}>
 
                 <ListView
                     tabLabel="deck"
@@ -151,15 +156,23 @@ export default class MyCards extends Component{
                     renderRow={this.renderCard}
                     contentContainerStyle={styles.listView}
                 />
-                <ListView
-                    tabLabel="lobby"
-                    dataSource={this.state.lobbyCards}
-                    renderRow={this.renderLobbyCards}
-                    contentContainerStyle={styles.listView}
-                />
+
+                <GridView
+                    items={this.state.lobbyCards}
+                    itemsPerRow={2}
+                    renderItem={this.renderLobbyCards}
+                    style={styles.lobbyListView}
+                  />
 
             </ScrollableTabView>
         );
+
+        /*<ListView
+              tabLabel="lobby"
+              dataSource={this.state.lobbyCards}
+              renderRow={this.renderLobbyCards}
+              contentContainerStyle={styles.lobbyListView}
+          />*/
     }
 
     renderLoadingView() {
@@ -174,13 +187,16 @@ export default class MyCards extends Component{
 
     renderLobbyCards(card){
         return (
-            <Card onPress={onCardLobbyPress} card={card}/>
+            <LobbyCard key={card.key} onPress={onCardLobbyPress} card={card}/>
         );
     }
 
     renderCard(card) {
       return (
-          <Card onPress={onPress} card={card}/>
+          <CardView
+              onPressAddToLobby={onPress}
+              onPressViewOwners={onPress}
+              card={card}/>
       );
     }
 }
