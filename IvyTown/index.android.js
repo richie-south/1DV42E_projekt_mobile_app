@@ -21,12 +21,11 @@ class IvyTown extends Component {
         <Router>
             <Scene key="root">
                 <Scene key='login' component={Login} title='Login' initial={true} hideNavBar={true}/>
-                <Scene key='mycards' component={MyCards} title='Deck' type='reset' hideNavBar={true}/>
+                <Scene key='mycards' component={MyCards} title='My Cards' type='reset' hideNavBar={true}/>
             </Scene>
         </Router>);
     }
 }
-
 
 const styles = StyleSheet.create({
   container: {
