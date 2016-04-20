@@ -14,6 +14,35 @@ import Card from './Card';
 export default class CardView extends Component{
     constructor(props) {
         super(props);
+        this.state = {
+            btnPresed: false,
+            btnColor: '#3F51B5',
+            btnText: 'Add to lobby'
+
+        };
+    }
+
+    press(add, remove, card){
+        if(!this.state.btnPresed){
+
+            this.setState({
+                btnPresed: true,
+                btnText: 'Remove',
+                btnColor: '#F44336'
+            });
+            add(card);
+        }else{
+            this.setState({
+                btnPresed: false,
+                btnText: 'Add to lobby',
+                btnColor: '#3F51B5'
+            });
+            remove(card);
+        }
+    }
+
+    viewPastOwnerPress(card){
+        this.props.onPressViewOwners(card);
     }
 
     render() {
@@ -26,22 +55,22 @@ export default class CardView extends Component{
                 <View style={styles.settings}>
 
                     <TouchableNativeFeedback
-                       onPress={this.props.onPressAddToLobby.bind(null, this.props.card)}
+                       onPress={this.press.bind(this, this.props.onPressAddToLobby, this.props.onPressRemoveFromLobby, this.props.card)}
                        background={TouchableNativeFeedback.SelectableBackground()}>
 
                        <View style={styles.buttonWrap}>
-                         <Text style={styles.buttonText}>Add to lobby</Text>
+                         <Text style={[styles.buttonText, {color: this.state.btnColor}]}>{this.state.btnText}</Text>
                        </View>
-                   </TouchableNativeFeedback>
+                    </TouchableNativeFeedback>
 
-                   <TouchableNativeFeedback
-                      onPress={this.props.onPressViewOwners.bind(null, this.props.card)}
+                    <TouchableNativeFeedback
+                      onPress={this.viewPastOwnerPress.bind(this, this.props.card)}
                       background={TouchableNativeFeedback.SelectableBackground()}>
 
                       <View style={styles.buttonWrap}>
                         <Text style={styles.buttonText}>Past owners</Text>
                       </View>
-                  </TouchableNativeFeedback>
+                    </TouchableNativeFeedback>
 
                 </View>
             </View>
