@@ -1,12 +1,7 @@
 'use strict';
 
-import React, {
-    Component,
-    Text,
-    Image,
-    View,
-    TouchableNativeFeedback
-} from 'react-native';
+import React, {Component} from 'react';
+import {Text, Image, View, TouchableNativeFeedback} from 'react-native';
 
 import styles from '../styles/MyCardsStyle';
 import Card from './Card';
@@ -23,9 +18,9 @@ export default class LobbyCard extends Component{
                onPress={this.props.onPress.bind(null, this.props.card)}
                background={TouchableNativeFeedback.SelectableBackground()}>
 
-               <View style={styles.lobbyCardWrap}>
+                <View style={styles.lobbyCardWrap}>
                    <Card card={this.props.card}></Card>
-               </View>
+                </View>
 
             </TouchableNativeFeedback>
         );

@@ -1,8 +1,8 @@
 'use strict';
 
-import React, {
-    StyleSheet
-} from 'react-native';
+import React from 'react';
+import {StyleSheet} from 'react-native';
+//const colors = ['#FF5722', '#4CAF50', '#00BCD4', '#2196F3', '#E91E63', '#9C27B0'];
 
 export default StyleSheet.create({
     container: {
@@ -28,11 +28,9 @@ export default StyleSheet.create({
 
     /*Card styles*/
 
-
-
     card: {
         flex: 1,
-        backgroundColor: '#FAFAFA',
+        backgroundColor: '#4CAF50',
         borderRadius: 8,
         padding: 12.4, // 16
         marginBottom: 16,
@@ -49,6 +47,7 @@ export default StyleSheet.create({
     },
 
     name: {
+        color: '#FFFFFF',
         fontSize: 24,
         marginBottom: 4,
         textAlign: 'center'
@@ -74,9 +73,9 @@ export default StyleSheet.create({
         flexDirection:'row',
         alignItems: 'center',
 
-        backgroundColor: '#D8D8D8',
-        borderWidth: 1,
-        borderColor: '#979797',
+        //backgroundColor: '#D8D8D8',
+        //borderWidth: 1,
+        //borderColor: '#979797',
         marginLeft: 2,
         padding:1,
         paddingLeft: 2,

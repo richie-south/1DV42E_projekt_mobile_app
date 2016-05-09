@@ -1,12 +1,7 @@
 'use strict';
 
-import React, {
-    Component,
-    Text,
-    Image,
-    View,
-    TouchableNativeFeedback
-} from 'react-native';
+import React, {Component} from 'react';
+import {Text, Image, View, TouchableNativeFeedback} from 'react-native';
 
 import styles from '../styles/MyCardsStyle';
 import Card from './Card';

@@ -1,13 +1,7 @@
 'use strict';
 
-import React, {
-    AppRegistry,
-    Component,
-    StyleSheet,
-    Text,
-    View,
-    AsyncStorage
-} from 'react-native';
+import React, {Component} from 'react';
+import {AppRegistry, StyleSheet, Text, View, AsyncStorage} from 'react-native';
 
 import FBLogin from 'react-native-facebook-login';
 import { Actions } from 'react-native-router-flux';
@@ -35,7 +29,7 @@ const styles = StyleSheet.create({
 // Ty4vKfDI2s9ieBvDz1dR1DvyUWgGBnIAeEiUGcA6iSXm7dY2sKAZDZD
 // id//const id = '10206232596794517';
 
-export default class Login extends React.Component{
+export default class Login extends Component{
 
     constructor(props){
         super(props);

@@ -1,19 +1,11 @@
-//'use strict';
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
+'use strict';
+
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import Login from './pages/Login.android';
 import MyCards from './pages/MyCards.android';
 
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React, {Component} from 'react';
+import {AppRegistry, StyleSheet, Text, View} from 'react-native';
 
 class IvyTown extends Component {
     render() {
