@@ -15,8 +15,8 @@ export default StyleSheet.create({
     listView: {
         paddingTop: 80,
         paddingBottom: 50,
-        paddingLeft: 16,
-        backgroundColor: '#D5D5D5'
+        paddingLeft: 16
+        //backgroundColor: '#D5D5D5'
     },
 
     title: {
@@ -149,8 +149,8 @@ export default StyleSheet.create({
     /* Lobby card*/
     lobbyListView: {
         paddingTop: 80,
-        paddingBottom: 50,
-        backgroundColor: '#D5D5D5'
+        paddingBottom: 50
+        //backgroundColor: '#D5D5D5'
     },
 
     lobbyCardWrap: {
