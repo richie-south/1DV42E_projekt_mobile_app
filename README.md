@@ -24,4 +24,9 @@ react native mobile app of 1dv42e projekt.
 
 **Card design mock 3***
 
-<img src="https://raw.githubusercontent.com/rs222kn/1DV42E_projekt_mobile_app/master/Concept/Design_mock_v3.png" width="900">
+<img src="https://raw.githubusercontent.com/rs222kn/1DV42E_projekt_mobile_app/master/Concept/Design_mock_v3.png" width="800">
+
+
+**Card design mock 3***
+
+<img src="https://raw.githubusercontent.com/rs222kn/1DV42E_projekt_mobile_app/master/Concept/Challange_view_mock_v1.png" width="800">
