@@ -27,38 +27,26 @@ export const getUserCredentials = (fbId) => {
 };
 
 export const createNewUser = (fbId, fbProfileImg, firstName, lastName) => {
-    const data = JSON.stringify({
+    let data = {
         fbId: fbId,
         fbProfileImg: fbProfileImg,
         firstName: firstName,
         lastName: lastName
-    });
-    return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-        request.onreadystatechange = (e) => {
-            if (request.readyState !== 4) {
-                return;
-            }
-
-            if (request.status === 200) {
-                const parsedResponse = JSON.parse(request.responseText);
-                return resolve(parsedResponse);
-            } else if (request.status === 400){
-                console.log('invalid parameters');
-                reject(e);
-            } else if (request.status === 500){
-                console.log('server error');
-                reject(e);
-            } else {
-                console.log('error ', e);
-                reject(e);
-            }
-        };
-
-        request.open('POST', config.url+'/user/create', true);
-        request.setRequestHeader('Content-type', 'application/text');
-        //console.log(data);
-        request.send(data);
+    };
+    return new Promise(function(resolve, reject) {
+        fetch(config.url+'/user/create', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, application/text, text/plain, text/html, *.*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            setTimeout(() => null, 0); // react native bugg workaround
+            return response.json(); })
+        .then(result => resolve(result))
+        .catch(e => reject(e));
     });
 };
 
