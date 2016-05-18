@@ -22,7 +22,7 @@ export default StyleSheet.create({
     },
 
     cardElevetion: {
-        elevation: 8
+        elevation: 4
     },
 
     noStyle: {
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     opponentCards: {
         position: 'absolute',
         top: 20,
-        left: (rWindow.width/2)-94,
+        left: (rWindow.width/2)-104,
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -80,7 +80,7 @@ export default StyleSheet.create({
     challangerCards: {
         position: 'absolute',
         bottom: 20,
-        left: (rWindow.width/2)-94,
+        left: (rWindow.width/2)-104,
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -116,6 +116,32 @@ export default StyleSheet.create({
     cardInPlaceholder: {
         position: 'absolute',
         top: 0,
+    },
+
+    // notification Boubble
+    notificationBoubble: {
+        position: 'absolute',
+        height: 34
+    },
+
+    notificationBoubbleText: {
+
+        
+        fontSize: 13,
+        marginRight: 1,
+        color: '#FFFFFF'
+    },
+
+    notificationInfo: {
+        flex: 1,
+        flexDirection:'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    notificationImage: {
+        width: 14,
+        height: 14
     }
 
 });
