@@ -1,17 +1,7 @@
 'use strict';
 
-import React, {
-    AppRegistry,
-    Component,
-    StyleSheet,
-    Text,
-    Image,
-    View,
-    ListView,
-    Dimensions,
-    TouchableNativeFeedback
-} from 'react-native';
-
+import React, {Component} from 'react';
+import {AppRegistry, StyleSheet, Text, Image, View, ListView} from 'react-native';
 
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { Actions } from 'react-native-router-flux';
@@ -20,7 +10,6 @@ import styles from '../styles/MyCardsStyle';
 import LobbyCard from '../components/LobbyCard';
 import CardView from '../components/CardView';
 import GridView from 'react-native-grid-view';
-import Rx from 'rx';
 import config from '../config';
 
 const lobby = 'lobby';
@@ -30,11 +19,14 @@ if (window.navigator && Object.keys(window.navigator).length == 0) {
   window = Object.assign(window, { navigator: {userAgent: 'ReactNative'}});
 }
 
-import io from 'socket.io-client/socket.io';
-const socket = io(config.url, {
+const io = require('socket.io-client/socket.io'); // need to require it do to react native bugg..
+let socket = io(config.url, {
     transports: ['websocket'], forceNew: true
 });
 
+socket.on('connect', () => {
+    //console.log('id1: ', socket.io.engine.id);
+});
 
 export default class MyCards extends Component{
     constructor(props) {
@@ -43,6 +35,7 @@ export default class MyCards extends Component{
             myCards: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
+            myCardsList: [],
             lobbyCards: [],
             loaded: false
         };
@@ -65,6 +58,7 @@ export default class MyCards extends Component{
                 console.log('my cards', myCards);
                 this.setState({
                     myCards: this.state.myCards.cloneWithRows(myCards),
+                    myCardsList: myCards,
                     loaded: true
                 });
                 this.socketLobby();
@@ -73,12 +67,12 @@ export default class MyCards extends Component{
     }
 
     socketJoinLobby(){
-        socket.emit('room', lobby);
+        socket.emit('room', {room: lobby, fbId: this.props.data.fbId});
     }
 
     socketLobbyUpdate(){
         socket.on('update', (cards) => {
-            console.log('lobby cards', cards);
+            console.log('lobbyCards ', cards);
             this.setState({
                 lobbyCards: cards.map((card, index) => {
                     card.key = card._id;
@@ -88,10 +82,10 @@ export default class MyCards extends Component{
         });
     }
 
-
     socketLobby(){
         this.socketJoinLobby();
         this.socketLobbyUpdate();
+        this.onNewGame();
     }
 
     /**
@@ -123,7 +117,37 @@ export default class MyCards extends Component{
      * @param  {[object]} card [object of card pressed]
      */
     onCardLobbyPress(card) {
-        console.log('cardLobby', card);
+        let ownCards = this.state.myCardsList
+            .filter(c => {
+        		if(c._id.toString() === card._id.toString()){
+        			this.onRemoveLobbyCard(card);
+                    return true;
+        		}
+        	});
+        if(ownCards.length > 0){
+            return;
+        }
+
+        socket.emit(lobby, {
+            challange: true,
+            joinNew: true,
+            challangeUserFbId: this.props.data.fbId,
+            challangerCard: this.state.myCardsList[0],
+            opponentCard: card });
+
+        Actions.challange({ data: socket });
+    }
+
+    onNewGame(){
+        socket.on('newGame', (gameProps) => {
+            socket.emit(lobby, {
+                challange: true,
+                joinNew: false,
+                opponentUserFbId: this.props.data.fbId,
+                room: gameProps.roomId
+            });
+            Actions.challange({ data: socket });
+        });
     }
 
 
@@ -133,7 +157,7 @@ export default class MyCards extends Component{
         }
 
         return (
-            <ScrollableTabView renderTabBar={false}>
+            <ScrollableTabView renderTabBar={false} initialPage={2}>
 
                 <ListView
                     tabLabel="deck"
@@ -143,6 +167,7 @@ export default class MyCards extends Component{
                 />
 
                 <GridView
+                    key={this.state.lobbyCards}
                     items={this.state.lobbyCards}
                     itemsPerRow={2}
                     renderItem={this.renderLobbyCards.bind(this)}
@@ -172,6 +197,7 @@ export default class MyCards extends Component{
     renderMyCard(card) {
       return (
           <CardView
+              key={card.key}
               onPressAddToLobby={this.onAddLobbyCard.bind(this)}
               onPressRemoveFromLobby={this.onRemoveLobbyCard.bind(this)}
               onPressViewOwners={this.onPassCardOwner.bind(this)}
