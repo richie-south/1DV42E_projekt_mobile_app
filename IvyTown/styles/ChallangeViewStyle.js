@@ -1,7 +1,8 @@
 'use strict';
 
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+const rWindow = Dimensions.get('window');
 
 export default StyleSheet.create({
     container: {
@@ -11,14 +12,10 @@ export default StyleSheet.create({
     // game card
     playCard: {
         flex:1,
-
         alignItems:'center',
         justifyContent:'center',
-        //flex: 1,
         backgroundColor: '#FFFFFF',
         borderRadius: 8,
-        /*padding: 12.4, // 16
-        marginBottom: 16,*/
         height: 78,
         width: 60
 
@@ -44,13 +41,13 @@ export default StyleSheet.create({
         color: 'rgba(99, 99, 99, 0.54)',
         fontSize: 11,
         fontWeight: 'bold'
-
     },
 
     // position of opponent cards
     opponentCards: {
         position: 'absolute',
-        top: 22,
+        top: 20,
+        left: (rWindow.width/2)-94,
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -82,8 +79,8 @@ export default StyleSheet.create({
     // position
     challangerCards: {
         position: 'absolute',
-        bottom: 22,
-
+        bottom: 20,
+        left: (rWindow.width/2)-94,
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
