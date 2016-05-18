@@ -7,11 +7,14 @@ import config from '../config';
 
 const type = [
     (<Image
-        source={require('../images/sword_icon.png')}
-        style={[styles.cardImage, {tintColor: 'rgba(99, 99, 99, 1)' }]} />),
-    (<Image
         source={require('../images/bottle_icon.png')}
         style={[styles.cardImage, {tintColor: 'rgba(99, 99, 99, 1)' }]} />),
+
+
+    (<Image
+        source={require('../images/sword_icon.png')}
+        style={[styles.cardImage, {tintColor: 'rgba(99, 99, 99, 1)' }]} />),
+
     (<Image
         source={require('../images/shield_icon.png')}
         style={[styles.cardImage, {tintColor: 'rgba(99, 99, 99, 1)' }]} />),
