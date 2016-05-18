@@ -39,17 +39,18 @@ export default class Card extends Component{
 
                     <View style={styles.statsWrap}>
                         <Image
+                            source={require('../images/bottle_icon.png')}
+                            style={[styles.statsImage, {tintColor: 'rgba(255,255,255, 0.54)' }]} />
+                        <CardStats type={'heal'} stats={this.props.card.stats.heal} />
+                    </View>
+
+                    <View style={styles.statsWrap}>
+                        <Image
                             source={require('../images/shield_icon.png')}
                             style={[styles.statsImage, {tintColor: 'rgba(255,255,255, 0.54)' }]} />
                         <CardStats type={'block'} stats={this.props.card.stats.block} />
                     </View>
 
-                    <View style={styles.statsWrap}>
-                        <Image
-                            source={require('../images/bottle_icon.png')}
-                            style={[styles.statsImage, {tintColor: 'rgba(255,255,255, 0.54)' }]} />
-                        <CardStats type={'heal'} stats={this.props.card.stats.heal} />
-                    </View>
                 </View>
               </View>
             </View>
