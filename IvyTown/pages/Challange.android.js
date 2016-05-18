@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import ChallangeCard from '../components/ChallangeCard';
 import PlaceholderCard from '../components/PlaceholderCard';
 import LifeMeter from '../components/LifeMeter';
+import NotificationBoubble from '../components/NotificationBoubble';
 
 import rUpdate from 'react-addons-update';
 import styles from '../styles/ChallangeViewStyle';
@@ -22,6 +23,7 @@ export default class MyCards extends Component{
             isPlaying: false,
 
             // challanger
+            challangerCard: null,
             challangerStats: null,
             challangerCardOne: false,
             challangerCardTwo: false,
@@ -32,6 +34,7 @@ export default class MyCards extends Component{
             challangerCardThreeType: null,
 
             // opponent
+            opponentCard: null,
             opponentStats: null,
             opponentCardOne: false,
             opponentCardTwo: false,
@@ -58,6 +61,9 @@ export default class MyCards extends Component{
                         gameInfo,
                         gameInfoLoaded: true,
                         challangerStats: gameInfo.challange.props,
+                        challangerCard: gameInfo.challange.challangerCard,
+
+                        opponentCard: gameInfo.challange.opponentCard,
                         opponentStats: gameInfo.challange.props
                     });
                 }
@@ -112,9 +118,9 @@ export default class MyCards extends Component{
     getPropertyByCardType(cardType){
         switch (cardType) {
             case 0:
-                return 'attackCards';
-            case 1:
                 return 'healCards';
+            case 1:
+                return 'attackCards';
             case 2:
                 return 'blockCards';
             default:
@@ -141,11 +147,18 @@ export default class MyCards extends Component{
         return (
             <View style={styles.container}>
                 <View style={styles.opponentCards}>
-                        <ChallangeCard margin={4} shadow={true} render={true} type={0} nr={this.state.opponentStats.attackCards}/>
-                        <ChallangeCard margin={4} shadow={true} render={true} type={1} nr={this.state.opponentStats.healCards}/>
-                        <ChallangeCard margin={4} shadow={true} render={true} type={2} nr={this.state.opponentStats.blockCards}/>
-                </View>
+                        <NotificationBoubble type={[0, 1]} stats={[this.state.opponentCard.stats.heal, `  +${this.state.opponentCard.stats.attackBoost}`]} bottom={true} widthMode={'large'} color={this.state.opponentCard.backgroundCardImg} >
+                            <ChallangeCard margin={4} shadow={true} render={true} type={0} nr={this.state.opponentStats.healCards}/>
+                        </NotificationBoubble>
 
+                        <NotificationBoubble type={[1]} stats={[this.state.opponentCard.stats.attack]} bottom={true} color={this.state.opponentCard.backgroundCardImg} >
+                            <ChallangeCard margin={4} shadow={true} render={true} type={1} nr={this.state.opponentStats.attackCards}/>
+                        </NotificationBoubble>
+
+                        <NotificationBoubble type={[2]} stats={[this.state.opponentCard.stats.block]} bottom={true} color={this.state.opponentCard.backgroundCardImg} >
+                            <ChallangeCard margin={4} shadow={true} render={true} type={2} nr={this.state.opponentStats.blockCards}/>
+                        </NotificationBoubble>
+                </View>
 
                 <View style={styles.activeCards}>
                     <View style={styles.opponentPlaceCards}>
@@ -178,11 +191,18 @@ export default class MyCards extends Component{
                     </View>
                 </View>
 
-
                 <View style={styles.challangerCards}>
-                    <ChallangeCard margin={4} shadow={true} render={true} onClick={this.addToActiveCards.bind(this)} type={0} nr={this.state.challangerStats.attackCards}/>
-                    <ChallangeCard margin={4} shadow={true} render={true} onClick={this.addToActiveCards.bind(this)} type={1} nr={this.state.challangerStats.healCards}/>
-                    <ChallangeCard margin={4} shadow={true} render={true} onClick={this.addToActiveCards.bind(this)} type={2} nr={this.state.challangerStats.blockCards}/>
+                    <NotificationBoubble type={[0, 1]} stats={[this.state.challangerCard.stats.heal, `  +${this.state.challangerCard.stats.attackBoost}`]} widthMode={'large'} color={this.state.challangerCard.backgroundCardImg} >
+                        <ChallangeCard margin={4} shadow={true} render={true} onClick={this.addToActiveCards.bind(this)} type={0} nr={this.state.challangerStats.healCards}/>
+                    </NotificationBoubble>
+
+                    <NotificationBoubble type={[1]} stats={[this.state.challangerCard.stats.attack]} color={this.state.challangerCard.backgroundCardImg} >
+                        <ChallangeCard margin={4} shadow={true} render={true} onClick={this.addToActiveCards.bind(this)} type={1} nr={this.state.challangerStats.attackCards}/>
+                    </NotificationBoubble>
+
+                    <NotificationBoubble type={[2]} stats={[this.state.challangerCard.stats.block]} color={this.state.challangerCard.backgroundCardImg} >
+                        <ChallangeCard margin={4} shadow={true} render={true} onClick={this.addToActiveCards.bind(this)} type={2} nr={this.state.challangerStats.blockCards}/>
+                    </NotificationBoubble>
                 </View>
 
             </View>
