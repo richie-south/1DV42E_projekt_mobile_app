@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, ListView} from 'react-native';
+import {AppRegistry, StyleSheet, Text, Image, View, ListView, TouchableWithoutFeedback} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import styles from '../styles/ChallangeViewStyle';
 import config from '../config';
@@ -37,10 +37,11 @@ export default class ChallangeCard extends Component{
     }
 
     hasShaddow(shadow){
-        if(shadow){
-            return styles.cardElevetion;
-        }
-        return styles.noStyle;
+        return shadow ? styles.cardElevetion : styles.noStyle;
+    }
+
+    hasMargin(margin){
+        return margin ? { margin } : styles.noStyle ;
     }
 
     getCardCounter(nr){
@@ -51,8 +52,26 @@ export default class ChallangeCard extends Component{
     }
 
     render() {
+        if(!this.props.render){
+            return false;
+        }
+        if(this.props.onClick){
+            return this.doRenderWithClick();
+        }
+        return this.doRender();
+    }
+
+    doRenderWithClick(){
         return (
-            <View style={[styles.playCard, this.hasShaddow(this.props.shadow)]}>
+            <TouchableWithoutFeedback onPress={() => this.props.onClick(this.props.type)}>
+                {this.doRender()}
+            </TouchableWithoutFeedback>
+        );
+    }
+
+    doRender(){
+        return (
+            <View style={[styles.playCard, this.hasShaddow(this.props.shadow), this.hasMargin(this.props.margin)]}>
                 {this.getCardCounter(this.props.nr)}
                 {this.getCardImage(this.props.type, this.props.renderX)}
             </View>
