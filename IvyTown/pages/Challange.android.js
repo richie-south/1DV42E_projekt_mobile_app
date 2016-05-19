@@ -53,6 +53,7 @@ export default class MyCards extends Component{
         //this.props.data
         //    .emit('lobby', { test: true, mes: 'in challange room' });
         this.gameInfo();
+        this.opponentPrePlayInfo();
     }
 
     gameInfo(){
@@ -60,33 +61,62 @@ export default class MyCards extends Component{
             .on('gameInfo', (gameInfo) => {
                 console.log(gameInfo);
                 if(!this.state.gameInfoLoaded){
-                    this.setState({
-                        gameInfo,
-                        gameInfoLoaded: true,
-                        challangerStats: gameInfo.challange.props,
-                        challangerCard: gameInfo.challange.challangerCard,
+                    if(this.props.fbId !== gameInfo.id){
+                        this.setState({
+                            gameInfo,
+                            gameInfoLoaded: true,
+                            challangerStats: gameInfo.challange.props,
+                            challangerCard: gameInfo.challange.opponentCard,
 
-                        opponentCard: gameInfo.challange.opponentCard,
-                        opponentStats: gameInfo.challange.props
-                    });
+                            opponentCard: gameInfo.challange.challangerCard,
+                            opponentStats: gameInfo.challange.props
+                        });
+                    }else{
+                        this.setState({
+                            gameInfo,
+                            gameInfoLoaded: true,
+                            challangerStats: gameInfo.challange.props,
+                            challangerCard: gameInfo.challange.challangerCard,
+
+                            opponentCard: gameInfo.challange.opponentCard,
+                            opponentStats: gameInfo.challange.props
+                        });
+                    }
+
                 }
             });
     }
 
-    opponentPrePlayInfo(){
+    gameRoundResult(){
         this.props.data
-            .on('prePlayData', (prePlayData) => {
-                this.setState({
-                    opponentCardOne: prePlayData.opponentCardOne,
-                    opponentCardTwo: prePlayData.opponentCardTwo,
-                    opponentCardThree: prePlayData.opponentCardThree,
-                });
+            .on('roundResult', data => {
+
             });
     }
 
-    sendCard(pos, type){
+    opponentPrePlayInfo(){
+        const cardPositions = [
+            'opponentCardOne',
+            'opponentCardTwo',
+            'opponentCardThree',
+        ];
         this.props.data
-            .emit('prePlayData', { pos, type});
+            .on('prePlayData', (data) => {
+                console.log('ooo där fick vi något');
+                const whatToUpdate = cardPositions[data.pos];
+                let state = {
+                    opponentCardOne: this.state.opponentCardOne,
+                    opponentCardTwo: this.state.opponentCardTwo,
+                    opponentCardThree: this.state.opponentCardThree,
+                };
+                state[whatToUpdate] = data.add;
+                this.setState(state);
+            });
+    }
+
+    sendCard(pos, type, add){
+        this.props.data
+            .emit('prePlayData', { add, pos, type});
     }
 
     addToActiveCards(cardType){
@@ -95,19 +125,19 @@ export default class MyCards extends Component{
                 challangerCardOne: true,
                 challangerCardOneType: cardType
             });
-            this.sendCard(0, cardType);
+            this.sendCard(0, cardType, true);
         } else if(!this.state.challangerCardTwo){
             this.setState({
                 challangerCardTwo: true,
                 challangerCardTwoType: cardType
             });
-            this.sendCard(1, cardType);
+            this.sendCard(1, cardType, true);
         } else if(!this.state.challangerCardThree){
             this.setState({
                 challangerCardThree: true,
                 challangerCardThreeType: cardType
             });
-            this.sendCard(2, cardType);
+            this.sendCard(2, cardType, true);
         }else{
             return;
         }
@@ -123,16 +153,19 @@ export default class MyCards extends Component{
                 challangerCardOne: false,
                 challangerCardOneType: null
             });
+            this.sendCard(pos, cardType, false);
         } else if(pos === 1 && this.state.challangerCardTwo){
             this.setState({
                 challangerCardTwo: false,
                 challangerCardTwoType: null
             });
+            this.sendCard(pos, cardType, false);
         } else if(pos === 2 && this.state.challangerCardThree){
             this.setState({
                 challangerCardThree: false,
                 challangerCardThreeType: null
             });
+            this.sendCard(pos, cardType, false);
         }
 
         this.updateChallangerStats(
