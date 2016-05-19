@@ -178,10 +178,11 @@ export default StyleSheet.create({
         bottom: 22
     },
 
+    // done button
     doneButton: {
         position: 'absolute',
-        left: 16,
-        bottom: 22,
+        left: 8,
+        bottom: 24,
 
         elevation: 2,
         borderRadius: 8,
