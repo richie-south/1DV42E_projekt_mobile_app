@@ -66,7 +66,11 @@ export default class ChallangeCard extends Component{
 
     doRenderWithClick(){
         return (
-            <TouchableWithoutFeedback onPress={() => this.props.onClick(this.props.type)}>
+            <TouchableWithoutFeedback onPress={() => {
+                    if(!this.props.disableClick){
+                        this.props.onClick(this.props.type);
+                    }
+                }}>
                 {this.doRender()}
             </TouchableWithoutFeedback>
         );
