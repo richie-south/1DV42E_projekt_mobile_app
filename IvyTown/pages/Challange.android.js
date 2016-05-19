@@ -138,6 +138,10 @@ export default class MyCards extends Component{
         this.setState(newState);
     }
 
+    renderNotification(render, type){
+        return render && type === 0 ? true : false;
+    }
+
     // props: { maxLife: 100, blockCards: 4, attackCards: 4, healCards: 4 },
     render() {
         if (!this.state.gameInfoLoaded) {
@@ -181,13 +185,17 @@ export default class MyCards extends Component{
                             <ChallangeCard render={this.state.challangerCardOne} type={this.state.challangerCardOneType} onClick={this.removeFromActiveCards.bind(this, 0)} />
                         </PlaceholderCard>
 
-                        <PlaceholderCard>
-                            <ChallangeCard render={this.state.challangerCardTwo} type={this.state.challangerCardTwoType} onClick={this.removeFromActiveCards.bind(this, 1)} />
-                        </PlaceholderCard>
+                        <NotificationBoubble doRender={[this.state.challangerCardOne]} cardBeforeType={[this.state.challangerCardOneType]} childCardType={this.state.challangerCardTwoType} type={[1]} bottom={true} reverse={true} stats={[`+${this.state.challangerCard.stats.attackBoost}`]} color={this.state.challangerCard.backgroundCardImg} >
+                            <PlaceholderCard>
+                                <ChallangeCard render={this.state.challangerCardTwo} type={this.state.challangerCardTwoType} onClick={this.removeFromActiveCards.bind(this, 1)} />
+                            </PlaceholderCard>
+                        </NotificationBoubble>
 
-                        <PlaceholderCard>
-                            <ChallangeCard render={this.state.challangerCardThree} type={this.state.challangerCardThreeType} onClick={this.removeFromActiveCards.bind(this, 2)} />
-                        </PlaceholderCard>
+                        <NotificationBoubble doRender={[this.state.challangerCardTwo, this.state.challangerCardOne]} cardBeforeType={[this.state.challangerCardTwoType, this.state.challangerCardOneType]} childCardType={this.state.challangerCardThreeType} type={[1]} bottom={true} reverse={true} stats={[`+${this.state.challangerCard.stats.attackBoost}`]} color={this.state.challangerCard.backgroundCardImg} >
+                            <PlaceholderCard>
+                                <ChallangeCard render={this.state.challangerCardThree} type={this.state.challangerCardThreeType} onClick={this.removeFromActiveCards.bind(this, 2)} />
+                            </PlaceholderCard>
+                        </NotificationBoubble>
                     </View>
                 </View>
 
