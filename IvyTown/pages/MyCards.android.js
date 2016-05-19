@@ -135,7 +135,7 @@ export default class MyCards extends Component{
             challangerCard: this.state.myCardsList[0],
             opponentCard: card });
 
-        Actions.challange({ data: socket });
+        Actions.challange({ data: socket, fbId: this.props.data.fbId });
     }
 
     onNewGame(){
