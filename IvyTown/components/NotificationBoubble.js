@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {AppRegistry, StyleSheet, Text, Image, View, ListView} from 'react-native';
 import styles from '../styles/ChallangeViewStyle';
+import * as Animatable from 'react-native-animatable';
 
 const type = [
     (<Image
@@ -34,7 +35,7 @@ export default class NotificationBoubble extends Component{
         if(bottom && reverse){
             return {
                 bottom: -34,
-                left:30,
+                left:34,
                 borderBottomLeftRadius: 44,
                 borderBottomRightRadius: 44,
                 borderTopLeftRadius: 0,
@@ -43,7 +44,7 @@ export default class NotificationBoubble extends Component{
        } else if(bottom){
            return {
               bottom: -34,
-              right:30,
+              right:34,
               borderBottomLeftRadius: 44,
               borderBottomRightRadius: 44,
               borderTopLeftRadius: 44,
@@ -52,7 +53,7 @@ export default class NotificationBoubble extends Component{
        } else if(!bottom && !reverse){
            return {
                top: -34,
-               right:30,
+               right:34,
                borderBottomLeftRadius: 44,
                borderBottomRightRadius: 0,
                borderTopLeftRadius: 44,
@@ -61,7 +62,7 @@ export default class NotificationBoubble extends Component{
        } else if(!bottom && reverse){
            return {
                top: -34,
-               left:30,
+               left:34,
                borderBottomLeftRadius: 0,
                borderBottomRightRadius: 44,
                borderTopLeftRadius: 44,
@@ -94,16 +95,13 @@ export default class NotificationBoubble extends Component{
                 return this.renderNone();
         }
 
-        return (
-            <View>
-                {this.isTop(this.props.bottom)}
-                <View style={[styles.notificationBoubble, this.getBorderRadius(this.props.bottom, this.props.reverse), this.getWidth(this.props.widthMode), { backgroundColor: this.props.color }]}>
-                    {this.isMultible(this.props.type, this.props.stats)}
-
-                </View>
-                {this.isBottom(this.props.bottom)}
+        return (<View >
+            {this.isTop(this.props.bottom)}
+            <View style={[styles.notificationBoubble, this.getBorderRadius(this.props.bottom, this.props.reverse), this.getWidth(this.props.widthMode), { backgroundColor: this.props.color }]}>
+                {this.isMultible(this.props.type, this.props.stats)}
             </View>
-        );
+            {this.isBottom(this.props.bottom)}
+        </View>);
     }
 
     isMultible(types, stats){
@@ -140,3 +138,7 @@ export default class NotificationBoubble extends Component{
             false;
     }
 }
+
+/**
+
+ */
