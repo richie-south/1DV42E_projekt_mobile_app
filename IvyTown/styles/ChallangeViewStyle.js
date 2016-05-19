@@ -22,7 +22,7 @@ export default StyleSheet.create({
     },
 
     cardElevetion: {
-        elevation: 4
+        elevation: 2
     },
 
     noStyle: {
@@ -125,8 +125,6 @@ export default StyleSheet.create({
     },
 
     notificationBoubbleText: {
-
-        
         fontSize: 13,
         marginRight: 1,
         color: '#FFFFFF'
