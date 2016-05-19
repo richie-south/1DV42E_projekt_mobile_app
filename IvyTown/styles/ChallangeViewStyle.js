@@ -140,6 +140,63 @@ export default StyleSheet.create({
     notificationImage: {
         width: 14,
         height: 14
+    },
+
+    // lifeMeter
+    lifeMeterWrap: {
+
+        borderRadius: 8,
+        width: 40,
+        height: 170,
+        backgroundColor: '#FFFFFF'
+    },
+
+    lifeMeter: {
+        borderRadius: 8,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#F44336',
+        width: 40
+    },
+
+    lifeHp: {
+        marginTop: 8,
+        color: '#FFFFFF',
+        fontSize: 10,
+        textAlign: 'center'
+    },
+
+    lifePosOpponent: {
+        position: 'absolute',
+        right: 16,
+        top: 22
+    },
+
+    lifePosChallanger: {
+        position: 'absolute',
+        right: 16,
+        bottom: 22
+    },
+
+    doneButton: {
+        position: 'absolute',
+        left: 16,
+        bottom: 22,
+
+        elevation: 2,
+        borderRadius: 8,
+        backgroundColor: '#FFFFFF',
+
+        height: 50,
+        width: 80,
+    },
+
+    doneButtonText: {
+        height: 50,
+
+        textAlign: 'center',
+        textAlignVertical: 'center',
+
     }
 
 });
