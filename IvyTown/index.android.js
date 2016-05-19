@@ -3,6 +3,7 @@
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import Login from './pages/Login.android';
 import MyCards from './pages/MyCards.android';
+import Challange from './pages/Challange.android';
 
 import React, {Component} from 'react';
 import {AppRegistry, StyleSheet, Text, View} from 'react-native';
@@ -14,28 +15,10 @@ class IvyTown extends Component {
             <Scene key="root">
                 <Scene key='login' component={Login} title='Login' initial={true} hideNavBar={true}/>
                 <Scene key='mycards' component={MyCards} title='My Cards' type='reset' hideNavBar={true}/>
+                <Scene key='challange' component={Challange} title='Challange' type='reset' hideNavBar={true}/>
             </Scene>
         </Router>);
     }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
 
 AppRegistry.registerComponent('IvyTown', () => IvyTown);
