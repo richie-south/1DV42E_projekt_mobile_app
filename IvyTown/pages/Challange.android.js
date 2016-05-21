@@ -54,6 +54,7 @@ export default class MyCards extends Component{
         //    .emit('lobby', { test: true, mes: 'in challange room' });
         this.gameInfo();
         this.opponentPrePlayInfo();
+        this.gameRoundResult();
     }
 
     gameInfo(){
@@ -65,32 +66,25 @@ export default class MyCards extends Component{
                         this.setState({
                             gameInfo,
                             gameInfoLoaded: true,
-                            challangerStats: gameInfo.challange.props,
+                            challangerStats: gameInfo.challange.opponentProps,
                             challangerCard: gameInfo.challange.opponentCard,
 
                             opponentCard: gameInfo.challange.challangerCard,
-                            opponentStats: gameInfo.challange.props
+                            opponentStats: gameInfo.challange.challangerProps
                         });
                     }else{
                         this.setState({
                             gameInfo,
                             gameInfoLoaded: true,
-                            challangerStats: gameInfo.challange.props,
+                            challangerStats: gameInfo.challange.challangerProps,
                             challangerCard: gameInfo.challange.challangerCard,
 
                             opponentCard: gameInfo.challange.opponentCard,
-                            opponentStats: gameInfo.challange.props
+                            opponentStats: gameInfo.challange.opponentProps
                         });
                     }
 
                 }
-            });
-    }
-
-    gameRoundResult(){
-        this.props.data
-            .on('roundResult', data => {
-
             });
     }
 
@@ -145,8 +139,6 @@ export default class MyCards extends Component{
             this.getPropertyByCardType(cardType), false, 1);
     }
 
-
-
     removeFromActiveCards(pos, cardType){
         if(pos === 0 && this.state.challangerCardOne){
             this.setState({
@@ -195,10 +187,27 @@ export default class MyCards extends Component{
         this.setState(newState);
     }
 
+    gameRoundResult(){
+        this.props.data
+            .on('roundResult', data => {
+
+            });
+    }
+
     completedStage(){
         this.setState({
             disableClick: true
         });
+        this.props.data
+            .emit('roundResult', {
+                cardTypes: [
+                    this.state.challangerCardOneType,
+                    this.state.challangerCardTwoType,
+                    this.state.challangerCardThreeType
+                ],
+
+                fbId: this.props.fbId
+            });
     }
 
     renderNotification(render, type){

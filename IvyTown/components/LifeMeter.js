@@ -20,7 +20,6 @@ export default class LifeMeter extends Component{
     }
 
     render() {
-
         return (
             <View style={styles.lifeMeterWrap}>
                 <View style={[styles.lifeMeter, this.renderHeight(this.props.maxLife, this.props.life)]}>
