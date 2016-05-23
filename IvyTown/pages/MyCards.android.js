@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import {AppRegistry, StyleSheet, Text, Image, View, ListView} from 'react-native';
+import ProgressBar from 'ProgressBarAndroid';
 
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { Actions } from 'react-native-router-flux';
@@ -184,6 +185,7 @@ export default class MyCards extends Component{
           <Text>
               Loading your cards...
           </Text>
+          <ProgressBar color={'#FF5722'}/>
         </View>
       );
     }

@@ -9,6 +9,13 @@ export default StyleSheet.create({
         flex: 1
     },
 
+    loading: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     // game card
     playCard: {
         flex:1,

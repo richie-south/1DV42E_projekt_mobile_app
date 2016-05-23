@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import {AppRegistry, StyleSheet, Text, View, AsyncStorage} from 'react-native';
-
+import ProgressBar from 'ProgressBarAndroid';
 import FBLogin from 'react-native-facebook-login';
 import { Actions } from 'react-native-router-flux';
 import co from 'co';
@@ -118,9 +118,7 @@ export default class Login extends Component{
     renderLoadingView(){
         return (
             <View style={styles.container}>
-              <Text>
-                Loading..
-              </Text>
+                <ProgressBar color={'#FF5722'}/>
             </View>
         );
     }
