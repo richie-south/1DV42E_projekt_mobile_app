@@ -9,14 +9,14 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FAFAFA',
+        backgroundColor: '#FFFFFF',
     },
 
     listView: {
-        paddingTop: 80,
+        paddingTop: 16,
         paddingBottom: 50,
         paddingLeft: 16
-        //backgroundColor: '#D5D5D5'
+        //backgroundColor: '#FFFFFF'
     },
 
     title: {
@@ -148,7 +148,7 @@ export default StyleSheet.create({
 
     /* Lobby card*/
     lobbyListView: {
-        paddingTop: 80,
+        paddingTop: 16,
         paddingBottom: 50
         //backgroundColor: '#D5D5D5'
     },
@@ -157,5 +157,38 @@ export default StyleSheet.create({
         marginLeft: 16
     },
 
+
+    // card view 2
+
+    cardViewWrap2: {
+        flex: 1,
+        flexDirection:'row'
+    },
+
+    settings2: {
+        justifyContent: 'center',
+        marginLeft: 8,
+        height: 125,
+        width: 125,
+        elevation: 2,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 44,
+        borderTopLeftRadius: 44,
+        borderTopRightRadius: 44,
+    },
+
+    buttonWrap2: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        width: 94,
+        height: 36
+    },
+
+    buttonText2: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        color: '#FFFFFF',
+        fontSize: 14
+    },
 
 });
