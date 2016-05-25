@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, ListView} from 'react-native';
+import {AppRegistry, StyleSheet, Text, Image, View, ListView, StatusBar, AppState} from 'react-native';
 import ProgressBar from 'ProgressBarAndroid';
 
 import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -25,7 +25,18 @@ let socket = io(config.url, {
     transports: ['websocket'], forceNew: true
 });
 
+const connectSocket = () => {
+    socket = io(config.url, {
+        transports: ['websocket'], forceNew: true
+    });
+};
+
 socket.on('connect', () => {
+    //console.log('id1: ', socket.io.engine.id);
+});
+
+socket.on('disconnect', () => {
+    console.log('socket disconnect');
     //console.log('id1: ', socket.io.engine.id);
 });
 
@@ -44,6 +55,16 @@ export default class MyCards extends Component{
 
     componentWillMount() {
         this.fetchData(this.props.data.fbId);
+        AppState.addEventListener('change', (a) => {
+            console.log('appstate..');
+            console.log(a);
+            console.log('end');
+            if(a === 'active'){
+                console.log('kopplar socket');
+                connectSocket();
+            }
+
+        });
     }
 
     /**
@@ -158,24 +179,39 @@ export default class MyCards extends Component{
         }
 
         return (
-            <ScrollableTabView renderTabBar={false} initialPage={2}>
+            <View style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
+                <StatusBar
+                 backgroundColor="#B2B2B2"
+                 barStyle="light-content"
+               />
+                <ScrollableTabView
 
-                <ListView
-                    tabLabel="deck"
-                    dataSource={this.state.myCards}
-                    renderRow={this.renderMyCard.bind(this)}
-                    contentContainerStyle={styles.listView}
-                />
+                    overlayTop={true}
+                    tabBarInactiveTextColor={'#262626'}
+                    tabBarActiveTextColor={'#262626'}
 
-                <GridView
-                    key={this.state.lobbyCards}
-                    items={this.state.lobbyCards}
-                    itemsPerRow={2}
-                    renderItem={this.renderLobbyCards.bind(this)}
-                    style={styles.lobbyListView}
-                  />
+                    tabBarBackgroundColor={'#FAFAFA'}
+                    tabBarUnderlineColor={'#C7C7C7'} >
 
-            </ScrollableTabView>
+
+                    <ListView
+                        tabLabel="my cards"
+                        dataSource={this.state.myCards}
+                        renderRow={this.renderMyCard.bind(this)}
+                        contentContainerStyle={styles.listView}
+                    />
+
+                    <GridView
+                        tabLabel="lobby"
+                        key={this.state.lobbyCards}
+                        items={this.state.lobbyCards}
+                        itemsPerRow={2}
+                        renderItem={this.renderLobbyCards.bind(this)}
+                        style={styles.lobbyListView}
+                      />
+
+                </ScrollableTabView>
+            </View>
         );
     }
 
