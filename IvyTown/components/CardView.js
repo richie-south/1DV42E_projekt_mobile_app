@@ -11,26 +11,24 @@ export default class CardView extends Component{
         super(props);
         this.state = {
             btnPresed: false,
-            btnColor: '#3F51B5',
+            btnColor: '#FFFFFF',
             btnText: 'Add to lobby'
-
         };
     }
 
     press(add, remove, card){
         if(!this.state.btnPresed){
-
             this.setState({
                 btnPresed: true,
                 btnText: 'Remove',
-                btnColor: '#F44336'
+                btnColor: '#000000'
             });
             add(card);
         }else{
             this.setState({
                 btnPresed: false,
                 btnText: 'Add to lobby',
-                btnColor: '#3F51B5'
+                btnColor: '#FFFFFF'
             });
             remove(card);
         }
@@ -42,19 +40,19 @@ export default class CardView extends Component{
 
     render() {
         return (
-
-            <View style={styles.cardViewWrap}>
+            <View style={styles.cardViewWrap2}>
                 <View>
                     <Card card={this.props.card} />
                 </View>
-                <View style={styles.settings}>
+
+                <View style={[styles.settings2, {backgroundColor: this.props.card.backgroundCardImg }]}>
 
                     <TouchableNativeFeedback
                        onPress={this.press.bind(this, this.props.onPressAddToLobby, this.props.onPressRemoveFromLobby, this.props.card)}
                        background={TouchableNativeFeedback.SelectableBackground()}>
 
-                       <View style={styles.buttonWrap}>
-                         <Text style={[styles.buttonText, {color: this.state.btnColor}]}>{this.state.btnText}</Text>
+                       <View style={styles.buttonWrap2}>
+                         <Text style={[styles.buttonText2, {color: this.state.btnColor}]}>{this.state.btnText}</Text>
                        </View>
                     </TouchableNativeFeedback>
 
@@ -62,14 +60,14 @@ export default class CardView extends Component{
                       onPress={this.viewPastOwnerPress.bind(this, this.props.card)}
                       background={TouchableNativeFeedback.SelectableBackground()}>
 
-                      <View style={styles.buttonWrap}>
-                        <Text style={styles.buttonText}>Past owners</Text>
+                      <View style={styles.buttonWrap2}>
+                        <Text style={styles.buttonText2}>Past owners</Text>
                       </View>
                     </TouchableNativeFeedback>
 
                 </View>
-            </View>
 
+            </View>
         );
     }
 }
