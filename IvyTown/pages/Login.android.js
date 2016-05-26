@@ -8,74 +8,11 @@ import { Actions } from 'react-native-router-flux';
 import co from 'co';
 import * as userDAL from '../models/userDAL';
 import Swiper from 'react-native-swiper';
+import styles from '../styles/LoginStyles';
+import * as asyncStorageDAL from '../models/asyncStorageDAL';
+
 const {width, height} = Dimensions.get('window');
-
 const STORAGE_KEY = '@AsyncStorageIvytown:userProps';
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        bottom: 30,
-        left: width/2-70,
-
-    },
-
-    image: {
-        marginBottom: 16
-    },
-
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-
-    carousel: {
-        flex: 1,
-        backgroundColor: '#FF5722'
-    },
-
-    options: {
-        backgroundColor: 'transparent',
-        position: 'absolute',
-        width: 100,
-        bottom: 24,
-        marginTop: 40,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    slide1: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#FF5722'
-
-    },
-
-    slide2: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#FF5722'
-
-    },
-
-    slide3: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#FF5722'
-
-    },
-
-    text: {
-        textAlign: 'left',
-        color: '#fff',
-        fontSize: 14,
-        fontWeight: 'bold',
-    }
-});
 
 export default class Login extends Component{
 
@@ -87,37 +24,12 @@ export default class Login extends Component{
         };
     }
 
-    getFbProfileImageUrl(fbId, token) {
-        const photoWidth = 480;
-        const api = `https://graph.facebook.com/v2.3/${fbId}/picture?width=${photoWidth}&redirect=false&access_token=${token}`;
-
-        return new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.onreadystatechange = (e) => {
-                if (request.readyState !== 4) {
-                    return;
-                }
-
-                if (request.status === 200) {
-
-                    const parsedResponse = JSON.parse(request.responseText);
-                    console.log(parsedResponse);
-                    return resolve(parsedResponse);
-                } else {
-                    reject(e);
-                }
-            };
-            request.open('GET', api);
-            request.send();
-        });
-    }
-
     componentDidMount(){
         this.loadUserProps();
     }
 
     loadUserProps(){
-        this._getUserProps()
+        asyncStorageDAL.getUserProps()
             .then(result => {
                 console.log('user saved props: ', result); // TODO: remove
                 if(result !== null){
@@ -130,30 +42,6 @@ export default class Login extends Component{
                 }
             })
             .catch(e => console.log(e));
-    }
-
-    _getUserProps(){
-        return new Promise((resolve, reject) => {
-            AsyncStorage.getItem(STORAGE_KEY)
-            .then(result => resolve(JSON.parse(result)))
-            .catch(e => reject(e));
-        });
-    }
-
-    async _removeStorage() {
-        try {
-            await AsyncStorage.removeItem(STORAGE_KEY);
-        } catch (error) {
-            console.log('error: ', error);
-        }
-    }
-
-    async _saveUserProps(props){
-        try {
-            await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(props));
-        } catch (error) {
-            console.log('AsyncStorage error: ', error.message);
-        }
     }
 
     render(){
@@ -212,24 +100,26 @@ export default class Login extends Component{
                               userDAL.getUserCredentials(data.profile.id)
                               .then(result => {
                                   if(result === null){
-                                      this.getFbProfileImageUrl(data.profile.id, data.token)
+                                      userDAL.getFbProfileImageUrl(data.profile.id, data.token)
                                           .then(imageData =>
                                               userDAL.createNewUser(
                                                   data.profile.id,
                                                   imageData.data.url,
                                                   data.profile.first_name,
-                                                  data.profile.last_name)
-                                          ).then(userCredencials => {
-                                              this._saveUserProps(userCredencials);
-                                              Actions.mycards({ data:userCredencials });
+                                                  data.profile.last_name))
+                                          .then(userCredencials => {
+                                              asyncStorageDAL.saveUserProps(userCredencials)
+                                                .then(a => Actions.mycards({ data:userCredencials }))
+                                                .catch(e => console.log('saveUserProps error: ', e));
                                           })
-                                           .catch(e => {
+                                          .catch(e => {
                                               console.log('error in createNewUser');
                                               console.log(e);
-                                           });
+                                          });
                                   }else {
-                                      this._saveUserProps(result);
-                                      Actions.mycards({ data:result });
+                                      asyncStorageDAL.saveUserProps(result)
+                                        .then(a => Actions.mycards({ data:result }))
+                                        .catch(e => console.log('saveUserProps error: ', e));
                                   }
                               })
                               .catch(e => {
@@ -239,27 +129,12 @@ export default class Login extends Component{
 
                           }}
                           onLogout={() => {
-                            console.log('Logged out.');
-                            this._removeStorage().done();
+                            asyncStorageDAL.removeStorage().done();
                           }}
                           onLoginFound={(data) => {
                               console.log('Existing login found.');
                               console.log(data);
                               Actions.mycards({ data: data });
-                          }}
-                          onLoginNotFound={() => {
-                              console.log('No user logged in.');
-                          }}
-                          onError={(data) => {
-                              console.log('ERROR');
-                              console.log(data);
-                          }}
-                          onCancel={() => {
-                              console.log('User cancelled.');
-                          }}
-                          onPermissionsMissing={(data) => {
-                              console.log('Check permissions!');
-                              console.log(data);
                           }}
                         />
                   </View>
