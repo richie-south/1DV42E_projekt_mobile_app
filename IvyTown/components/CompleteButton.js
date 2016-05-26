@@ -14,15 +14,20 @@ export default class CompleteButton extends Component{
         };
     }
 
-    componentWillMount() {
-    }
-
+    /**
+     * [removes button from screen]
+     */
     removeBtn(){
         this.setState({
             render: false
         });
     }
 
+    /**
+     * [if complete button should be renderd on screen]
+     * @param  {[array]} array [array of bools]
+     * @return {[bool]}       [true/false]
+     */
     doRender(array){
         const isTrue = array.filter(a => a);
         return isTrue.length === array.length;
