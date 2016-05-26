@@ -22,55 +22,41 @@ export default class NotificationBoubble extends Component{
         super(props);
     }
 
-    componentWillMount() {
-    }
-
+    /**
+     * [returns width of boubble, large or normal]
+     * @param  {[string]} mode [large to set it to large]
+     * @return {[object]}      [object to be used as react style]
+     */
     getWidth(mode){
         return mode === 'large' ?
             { width: 90 }:
             { width: 46 };
     }
 
-    getBorderRadius(bottom, reverse){
+    /**
+     * [determines position of Notification boubble]
+     * @param  {[bool]} bottom  [if notification should be bottom]
+     * @param  {[bool]} reverse [if notification should be reversed default boubble left]
+     * @return {[object]}       [react style object]
+     */
+    getPosition(bottom, reverse){
         if(bottom && reverse){
-            return {
-                bottom: -34,
-                left:34,
-                borderBottomLeftRadius: 44,
-                borderBottomRightRadius: 44,
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 44,
-            };
+            return styles.notificationBottomReverse;
        } else if(bottom){
-           return {
-              bottom: -34,
-              right:34,
-              borderBottomLeftRadius: 44,
-              borderBottomRightRadius: 44,
-              borderTopLeftRadius: 44,
-              borderTopRightRadius: 0,
-          };
+            return styles.notificationBottom;
        } else if(!bottom && !reverse){
-           return {
-               top: -34,
-               right:34,
-               borderBottomLeftRadius: 44,
-               borderBottomRightRadius: 0,
-               borderTopLeftRadius: 44,
-               borderTopRightRadius: 44,
-           };
+            return styles.notificationTop;
        } else if(!bottom && reverse){
-           return {
-               top: -34,
-               left:34,
-               borderBottomLeftRadius: 0,
-               borderBottomRightRadius: 44,
-               borderTopLeftRadius: 44,
-               borderTopRightRadius: 44,
-           };
+            return styles.notificationTopReverse;
        }
     }
 
+    /**
+     * [determines if notification boubble should be renderd on screen]
+     * @param  {[number]} beforeType [type if card notification boubble has ahead in render list]
+     * @param  {[number]} childType  [type if card notification boubble has as child]
+     * @return {[bool]}            [true or false if render]
+     */
     doRender(beforeType, childType){
         if(beforeType[0] === 0 && childType === 1){
             return true;
@@ -81,6 +67,10 @@ export default class NotificationBoubble extends Component{
         return false;
     }
 
+    /**
+     * [renders only child components and not a notification boubble]
+     * @return {[react childs]} [only children]
+     */
     renderNone(){
         return (<View>
                 {this.props.children}
@@ -95,22 +85,28 @@ export default class NotificationBoubble extends Component{
                 return this.renderNone();
         }
 
-        return (<View >
+        return (<View>
             {this.isTop(this.props.bottom)}
-            <View style={[styles.notificationBoubble, this.getBorderRadius(this.props.bottom, this.props.reverse), this.getWidth(this.props.widthMode), { backgroundColor: this.props.color }]}>
+            <View style={[styles.notificationBoubble, this.getPosition(this.props.bottom, this.props.reverse), this.getWidth(this.props.widthMode), { backgroundColor: this.props.color }]}>
                 {this.isMultible(this.props.type, this.props.stats)}
             </View>
             {this.isBottom(this.props.bottom)}
         </View>);
     }
 
+    /**
+     * [determines if there should be multible items in notification boubble]
+     * @param  {[array]}  types [multible typs of numbers representing heal, sword, block]
+     * @param  {[array]}  stats [stat of type]
+     * @return {component}      [notification component]
+     */
     isMultible(types, stats){
         if(types.length > 1 && stats.length > 1){
             let info = [];
             for (let i = 0; i < types.length; i++) {
                 info.push(
                     <Text key={i} style={styles.notificationBoubbleText}>{stats[i]}</Text>);
-                info.push(type[i]);
+                    info.push(React.cloneElement(type[i], {key: i+'image'} ));
             }
 
             return (<View style={styles.notificationInfo}>
@@ -138,7 +134,3 @@ export default class NotificationBoubble extends Component{
             false;
     }
 }
-
-/**
-
- */
