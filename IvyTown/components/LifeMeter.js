@@ -9,9 +9,12 @@ export default class LifeMeter extends Component{
         super(props);
     }
 
-    componentWillMount() {
-    }
-
+    /**
+     * [determines height of life bar]
+     * @param  {[type]} max  [description]
+     * @param  {[type]} life [description]
+     * @return {[type]}      [description]
+     */
     renderHeight(max, life){
         const height = (1 - ((max - life) / max )) * 170 ;
         return {
