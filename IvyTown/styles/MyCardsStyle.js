@@ -120,16 +120,14 @@ export default StyleSheet.create({
 
     settings: {
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
-        marginTop: 6,
-        marginBottom: 6,
-
-        height: 100,
+        marginLeft: 8,
+        height: 125,
         width: 125,
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-
-        elevation: 2
+        elevation: 2,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 44,
+        borderTopLeftRadius: 44,
+        borderTopRightRadius: 44,
     },
 
     buttonWrap: {
@@ -142,7 +140,7 @@ export default StyleSheet.create({
     buttonText: {
         justifyContent: 'center',
         alignSelf: 'center',
-        color: '#3F51B5',
+        color: '#FFFFFF',
         fontSize: 14
     },
 
@@ -157,38 +155,5 @@ export default StyleSheet.create({
         marginLeft: 16
     },
 
-
-    // card view 2
-
-    cardViewWrap2: {
-        flex: 1,
-        flexDirection:'row'
-    },
-
-    settings2: {
-        justifyContent: 'center',
-        marginLeft: 8,
-        height: 125,
-        width: 125,
-        elevation: 2,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 44,
-        borderTopLeftRadius: 44,
-        borderTopRightRadius: 44,
-    },
-
-    buttonWrap2: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        width: 94,
-        height: 36
-    },
-
-    buttonText2: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontSize: 14
-    },
 
 });
