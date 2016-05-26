@@ -1,11 +1,9 @@
 'use strict';
 
-import React, {
-    Component,
-    View
-} from 'react-native';
-
+import React, {Component} from 'react';
+import {AppRegistry, View} from 'react-native';
 import styles from '../../styles/MyCardsStyle';
+
 const propAvailable = 'rgba(255,255,255, 0.54)';
 const propUnAvailable = 'rgba(0,0,0, 0.54)';
 
@@ -14,6 +12,12 @@ export default class CardStats extends Component{
         super(props);
     }
 
+    /**
+     * [determines background color of prop]
+     * @param  {[number]} val [value of prop]
+     * @param  {[number]} nr  [nr of prop]
+     * @return {[object]}     [react style object]
+     */
     getAttackColor(val, nr) {
         if(val >= 40 && nr === 0){
             return propUnAvailable;
@@ -35,6 +39,12 @@ export default class CardStats extends Component{
         }
     }
 
+    /**
+     * [determines background color of prop]
+     * @param  {[number]} val [value of prop]
+     * @param  {[number]} nr  [nr of prop]
+     * @return {[object]}     [react style object]
+     */
     getBlockColor(val, nr) {
         if(val >= 30 && nr === 0){
             return propUnAvailable;
@@ -56,6 +66,12 @@ export default class CardStats extends Component{
         }
     }
 
+    /**
+     * [determines background color of prop]
+     * @param  {[number]} val [value of prop]
+     * @param  {[number]} nr  [nr of prop]
+     * @return {[object]}     [react style object]
+     */
     getHealColor(val, nr) {
         if(val >= 20 && nr === 0){
             return propUnAvailable;
@@ -84,8 +100,6 @@ export default class CardStats extends Component{
                 return this.getBlockColor(val, nr);
             case 'heal':
                 return this.getHealColor(val, nr);
-            default:
-
         }
     }
 
