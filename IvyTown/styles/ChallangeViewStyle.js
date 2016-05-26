@@ -149,6 +149,42 @@ export default StyleSheet.create({
         height: 14
     },
 
+    notificationBottom: {
+        bottom: -34,
+        right:34,
+        borderBottomLeftRadius: 44,
+        borderBottomRightRadius: 44,
+        borderTopLeftRadius: 44,
+        borderTopRightRadius: 0,
+    },
+
+    notificationBottomReverse: {
+        bottom: -34,
+        left:34,
+        borderBottomLeftRadius: 44,
+        borderBottomRightRadius: 44,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 44,
+    },
+
+    notificationTop: {
+        top: -34,
+        right:34,
+        borderBottomLeftRadius: 44,
+        borderBottomRightRadius: 0,
+        borderTopLeftRadius: 44,
+        borderTopRightRadius: 44,
+    },
+
+    notificationTopReverse: {
+        top: -34,
+        left:34,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 44,
+        borderTopLeftRadius: 44,
+        borderTopRightRadius: 44,
+    },
+
     // lifeMeter
     lifeMeterWrap: {
 
