@@ -11,6 +11,7 @@ import styles from '../styles/MyCardsStyle';
 import LobbyCard from '../components/LobbyCard';
 import CardView from '../components/CardView';
 import GridView from 'react-native-grid-view';
+import * as userDAL from '../models/userDAL';
 import config from '../config';
 
 const lobby = 'lobby';
@@ -54,29 +55,20 @@ export default class MyCards extends Component{
     }
 
     componentWillMount() {
-        this.fetchData(this.props.data.fbId);
+        this.getUserCards(this.props.data.fbId);
         AppState.addEventListener('change', (a) => {
-            console.log('appstate..');
-            console.log(a);
-            console.log('end');
             if(a === 'active'){
-                console.log('kopplar socket');
                 connectSocket();
             }
-
         });
     }
 
     /**
      * [retrives card data]
      */
-    fetchData(fbId) {
-        const url = config.url+'/user/cards/'+fbId;
-        fetch(url)
-            .then(response => {
-                setTimeout(() => null, 0); // react native bugg workaround
-                return response.json();})
-            .then((myCards) => {
+    getUserCards(fbId) {
+        userDAL.getUserCards(fbId)
+            .then(myCards => {
                 console.log('my cards', myCards);
                 this.setState({
                     myCards: this.state.myCards.cloneWithRows(myCards),
@@ -185,21 +177,17 @@ export default class MyCards extends Component{
                  barStyle="light-content"
                />
                 <ScrollableTabView
-
                     overlayTop={true}
                     tabBarInactiveTextColor={'#262626'}
                     tabBarActiveTextColor={'#262626'}
-
                     tabBarBackgroundColor={'#FAFAFA'}
                     tabBarUnderlineColor={'#C7C7C7'} >
-
 
                     <ListView
                         tabLabel="my cards"
                         dataSource={this.state.myCards}
                         renderRow={this.renderMyCard.bind(this)}
-                        contentContainerStyle={styles.listView}
-                    />
+                        contentContainerStyle={styles.listView}/>
 
                     <GridView
                         tabLabel="lobby"
@@ -207,8 +195,7 @@ export default class MyCards extends Component{
                         items={this.state.lobbyCards}
                         itemsPerRow={2}
                         renderItem={this.renderLobbyCards.bind(this)}
-                        style={styles.lobbyListView}
-                      />
+                        style={styles.lobbyListView}/>
 
                 </ScrollableTabView>
             </View>
