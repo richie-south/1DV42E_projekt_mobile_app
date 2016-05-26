@@ -10,7 +10,6 @@ const type = [
         source={require('../images/bottle_icon.png')}
         style={[styles.cardImage, {tintColor: 'rgba(99, 99, 99, 1)' }]} />),
 
-
     (<Image
         source={require('../images/sword_icon.png')}
         style={[styles.cardImage, {tintColor: 'rgba(99, 99, 99, 1)' }]} />),
@@ -29,9 +28,12 @@ export default class ChallangeCard extends Component{
         super(props);
     }
 
-    componentWillMount() {
-    }
-
+    /**
+     * [determines card type and returns an image component]
+     * @param  {[number]}  cardType [type of card 0 - 2]
+     * @param  {Boolean} isX        []
+     * @return {[react component]}  [react image component]
+     */
     getCardImage(cardType, isX){
         if(isX || (cardType == undefined && !isX)){
             return type[3];
@@ -39,14 +41,29 @@ export default class ChallangeCard extends Component{
         return type[cardType];
     }
 
+    /**
+     * [adds shaddow if shaddow true]
+     * @param  {[type]}  shadow [description]
+     * @return {object}         [react style object]
+     */
     hasShaddow(shadow){
         return shadow ? styles.cardElevetion : styles.noStyle;
     }
 
+    /**
+     * [adds margin to card]
+     * @param  {[number]}  margin [number of margin]
+     * @return {object}        [react style object]
+     */
     hasMargin(margin){
         return margin ? { margin } : styles.noStyle ;
     }
 
+    /**
+     * [adds a card counter on card, number of cards left]
+     * @param  {[number]} nr [number of cards left]
+     * @return {[component/false]}    [react component of false]
+     */
     getCardCounter(nr){
         if(nr){
             return (<Text style={styles.cardCounter}>{this.props.nr}</Text>);
@@ -64,6 +81,10 @@ export default class ChallangeCard extends Component{
         return this.doRender();
     }
 
+    /**
+     * [renders card with click functionality]
+     * @return {[component]} [react component]
+     */
     doRenderWithClick(){
         return (
             <TouchableWithoutFeedback onPress={() => {
