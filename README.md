@@ -1,6 +1,17 @@
 # 1DV42E_projekt_mobile_app
 react native mobile app of 1dv42e projekt.
 
+## Installations anvisnigar
+
+- Ladda ned repot
+- Följ Facebooks installations anvinsingar för [react native](http://facebook.github.io/react-native/releases/0.25/docs/getting-started.html#content)
+- Gå in i mappen 'IvyTown'
+- Kör 'npm install'
+- Byt namn på filen 'config_setup.js' till 'config.js'
+- Öppna filen 'config.js' och följ des instruktioner
+- Starta din virtuella android maskin
+- När det har laddat klart kör 'react-native run-android'
+- Nu ska appen startas i din virtuella android maskin
 
 ****
 
