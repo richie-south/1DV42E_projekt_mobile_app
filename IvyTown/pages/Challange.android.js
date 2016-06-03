@@ -1,7 +1,8 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, ListView} from 'react-native';
+import {AppRegistry, StyleSheet, Text, Image, View, ListView, AsyncStorage} from 'react-native';
+import ProgressBar from 'ProgressBarAndroid';
 import { Actions } from 'react-native-router-flux';
 
 import ChallangeCard from '../components/ChallangeCard';
@@ -9,7 +10,7 @@ import PlaceholderCard from '../components/PlaceholderCard';
 import LifeMeter from '../components/LifeMeter';
 import NotificationBoubble from '../components/NotificationBoubble';
 import CompleteButton from '../components/CompleteButton';
-
+import * as asyncStorageDAL from '../models/asyncStorageDAL';
 
 import rUpdate from 'react-addons-update';
 import styles from '../styles/ChallangeViewStyle';
@@ -46,12 +47,14 @@ export default class MyCards extends Component{
             opponentCardOneType: null,
             opponentCardTwoType: null,
             opponentCardThreeType:null,
+
+            isHidingCardOne: true,
+            isHidingCardTwo: true,
+            isHidingCardThree: true,
         };
     }
 
     componentWillMount() {
-        //this.props.data
-        //    .emit('lobby', { test: true, mes: 'in challange room' });
         this.gameInfo();
         this.opponentPrePlayInfo();
         this.gameRoundResult();
@@ -83,7 +86,6 @@ export default class MyCards extends Component{
                             opponentStats: gameInfo.challange.opponentProps
                         });
                     }
-
                 }
             });
     }
@@ -96,7 +98,6 @@ export default class MyCards extends Component{
         ];
         this.props.data
             .on('prePlayData', (data) => {
-                console.log('ooo där fick vi något');
                 const whatToUpdate = cardPositions[data.pos];
                 let state = {
                     opponentCardOne: this.state.opponentCardOne,
@@ -172,8 +173,6 @@ export default class MyCards extends Component{
                 return 'attackCards';
             case 2:
                 return 'blockCards';
-            default:
-
         }
     }
 
@@ -182,39 +181,120 @@ export default class MyCards extends Component{
             return;
         }
         let newState = rUpdate(this.state, {
-            challangerStats: { [propertyToChange]: {$set: (remove ? this.state.challangerStats[propertyToChange] +nr : this.state.challangerStats[propertyToChange] -nr)} }
+            challangerStats: { [propertyToChange]: {
+                $set: (remove ? this.state.challangerStats[propertyToChange] +nr :
+                    this.state.challangerStats[propertyToChange] -nr)} }
         });
         this.setState(newState);
     }
 
+    goBackToLobby(){
+        asyncStorageDAL.getUserProps()
+            .then(result => {
+                if(result !== null){
+                    setTimeout(() => {
+                        Actions.mycards({ data:result });
+                    }, 0);
+                }else{
+                    this.setState({loaded: true});
+                }
+            })
+            .catch(e => console.log(e));
+    }
+
+    gameEnded(){
+        this.props.data
+            .on('gameEnded', (data) => {
+                this.goBackToLobby();
+            });
+    }
+
     gameRoundResult(){
+        let opponentMap = [
+            'isHidingCardOne',
+            'isHidingCardTwo',
+            'isHidingCardThree',
+
+            'opponentCardOneType',
+            'opponentCardTwoType',
+            'opponentCardThreeType'
+        ];
+
         this.props.data
             .on('roundResult', data => {
 
+                console.log(data);
+                let i = 0;
+                let interval = setInterval(() => {
+                    if(i === 3){
+                        return clearInterval(interval);
+                    }
+                    let opponentPropsShow = opponentMap[i];
+                    let opponentType = opponentMap[i+3];
+
+
+                    let newState;
+                    if(data.challangerFbId === this.props.fbId){ // isChallanger
+                        let roundCards = data.roundCards[1];
+                        newState = rUpdate(this.state, {
+                            challangerStats: {
+                                life: {$set: data.roundResult[i].cLife }
+                            },
+
+                            [opponentPropsShow]: { $set: false },
+                            [opponentType]: { $set: roundCards[i].type },
+
+                            opponentStats: {
+                                life: {$set: data.roundResult[i].oLife },
+                                healCards: {$set: data.roundResult[i].oHealCards },
+                                attackCards: {$set: data.roundResult[i].oAttackCards },
+                                blockCards: {$set: data.roundResult[i].oBlockCards }
+                            }
+                        });
+
+                    } else {
+                        let roundCards = data.roundCards[0];
+
+                        newState = rUpdate(this.state, {
+                           challangerStats: {
+                               life: {$set: data.roundResult[i].oLife }
+                           },
+
+                           [opponentPropsShow]: { $set: false },
+                           [opponentType]: { $set: roundCards[i].type },
+
+                           opponentStats: {
+                               life: {$set: data.roundResult[i].cLife },
+                               healCards: {$set: data.roundResult[i].cHealCards },
+                               attackCards: {$set: data.roundResult[i].cAttackCards },
+                               blockCards: {$set: data.roundResult[i].cBlockCards }
+                           }
+                        });
+                    }
+
+                    this.setState(newState);
+                    i++;
+                }, 1500);
+
+                setTimeout(() => {
+                    console.log(this.state);
+                }, 5000);
             });
     }
 
     completedStage(){
-        this.setState({
-            disableClick: true
-        });
+        this.setState({ disableClick: true });
         this.props.data
             .emit('roundResult', {
                 cardTypes: [
                     this.state.challangerCardOneType,
                     this.state.challangerCardTwoType,
-                    this.state.challangerCardThreeType
-                ],
+                    this.state.challangerCardThreeType ],
 
                 fbId: this.props.fbId
             });
     }
 
-    renderNotification(render, type){
-        return render && type === 0 ? true : false;
-    }
-
-    // props: { maxLife: 100, blockCards: 4, attackCards: 4, healCards: 4 },
     render() {
         if (!this.state.gameInfoLoaded) {
             return this.renderLoadingView();
@@ -226,37 +306,37 @@ export default class MyCards extends Component{
                     <LifeMeter maxLife={this.state.opponentStats.maxLife} life={this.state.opponentStats.life}/>
                 </View>
                 <View style={styles.opponentCards}>
-                        <NotificationBoubble type={[0, 1]} stats={[this.state.opponentCard.stats.heal, `  +${this.state.opponentCard.stats.attackBoost}`]} bottom={true} widthMode={'large'} color={this.state.opponentCard.backgroundCardImg} >
-                            <ChallangeCard margin={4} shadow={true} render={true} type={0} nr={this.state.opponentStats.healCards}/>
-                        </NotificationBoubble>
+                    <NotificationBoubble type={[0, 1]} stats={[this.state.opponentCard.stats.heal, `  +${this.state.opponentCard.stats.attackBoost}`]} bottom={true} widthMode={'large'} color={this.state.opponentCard.backgroundCardImg} >
+                        <ChallangeCard margin={4} shadow={true} render={true} type={0} nr={this.state.opponentStats.healCards}/>
+                    </NotificationBoubble>
 
-                        <NotificationBoubble type={[1]} stats={[this.state.opponentCard.stats.attack]} bottom={true} color={this.state.opponentCard.backgroundCardImg} >
-                            <ChallangeCard margin={4} shadow={true} render={true} type={1} nr={this.state.opponentStats.attackCards}/>
-                        </NotificationBoubble>
+                    <NotificationBoubble type={[1]} stats={[this.state.opponentCard.stats.attack]} bottom={true} color={this.state.opponentCard.backgroundCardImg} >
+                        <ChallangeCard margin={4} shadow={true} render={true} type={1} nr={this.state.opponentStats.attackCards}/>
+                    </NotificationBoubble>
 
-                        <NotificationBoubble type={[2]} stats={[this.state.opponentCard.stats.block]} bottom={true} color={this.state.opponentCard.backgroundCardImg} >
-                            <ChallangeCard margin={4} shadow={true} render={true} type={2} nr={this.state.opponentStats.blockCards}/>
-                        </NotificationBoubble>
+                    <NotificationBoubble type={[2]} stats={[this.state.opponentCard.stats.block]} bottom={true} color={this.state.opponentCard.backgroundCardImg} >
+                        <ChallangeCard margin={4} shadow={true} render={true} type={2} nr={this.state.opponentStats.blockCards}/>
+                    </NotificationBoubble>
                 </View>
 
                 <View style={styles.activeCards}>
                     <View style={styles.opponentPlaceCards}>
                         <PlaceholderCard>
-                            <ChallangeCard render={this.state.opponentCardOne} type={this.state.opponentCardTOneType} renderX={this.state.isPlaying} />
+                            <ChallangeCard render={this.state.opponentCardOne} type={this.state.opponentCardOneType} renderX={this.state.isHidingCardOne} />
                         </PlaceholderCard>
-                        <NotificationBoubble animate={true} doRender={[this.state.opponentCardOne]} cardBeforeType={[this.state.opponentCardOneType]} childCardType={this.state.opponentCardTwoType} type={[1]} bottom={true} reverse={true} stats={[`+${this.state.opponentCard.stats.attackBoost}`]} color={this.state.opponentCard.backgroundCardImg} >
+
+                        <NotificationBoubble animate={true} doRender={[this.state.opponentCardOne]} cardBeforeType={[this.state.opponentCardOneType]} childCardType={this.state.opponentCardTwoType} type={[1]} reverse={true} stats={[`+${this.state.opponentCard.stats.attackBoost}`]} color={this.state.opponentCard.backgroundCardImg} >
                             <PlaceholderCard>
-                                <ChallangeCard render={this.state.opponentCardTwo} type={this.state.opponentCardTwoType} renderX={this.state.isPlaying} />
+                                <ChallangeCard render={this.state.opponentCardTwo} type={this.state.opponentCardTwoType} renderX={this.state.isHidingCardTwo} />
                             </PlaceholderCard>
                         </NotificationBoubble>
 
-                        <NotificationBoubble animate={true} doRender={[this.state.opponentCardTwo, this.state.opponentCardOne]} cardBeforeType={[this.state.opponentCardTwoType, this.state.opponentCardOneType]} childCardType={this.state.opponentCardThreeType} type={[1]} bottom={true} reverse={true} stats={[`+${this.state.opponentCard.stats.attackBoost}`]} color={this.state.opponentCard.backgroundCardImg} >
+                        <NotificationBoubble animate={true} doRender={[this.state.opponentCardTwo, this.state.opponentCardOne]} cardBeforeType={[this.state.opponentCardTwoType, this.state.opponentCardOneType]} childCardType={this.state.opponentCardThreeType} type={[1]} reverse={true} stats={[`+${this.state.opponentCard.stats.attackBoost}`]} color={this.state.opponentCard.backgroundCardImg} >
                             <PlaceholderCard>
-                                <ChallangeCard render={this.state.opponentCardThree} type={this.state.opponentCardThreeType} renderX={this.state.isPlaying} />
+                                <ChallangeCard render={this.state.opponentCardThree} type={this.state.opponentCardThreeType} renderX={this.state.isHidingCardThree} />
                             </PlaceholderCard>
                         </NotificationBoubble>
                     </View>
-
 
                     <View style={styles.challangerPlaceCards}>
                         <PlaceholderCard>
@@ -291,10 +371,9 @@ export default class MyCards extends Component{
                     </NotificationBoubble>
                 </View>
                 <CompleteButton doRender={[
-                        this.state.challangerCardOne,
-                        this.state.challangerCardTwo,
-                        this.state.challangerCardThree
-                    ]}
+                    this.state.challangerCardOne,
+                    this.state.challangerCardTwo,
+                    this.state.challangerCardThree ]}
 
                     onClick={this.completedStage.bind(this)}/>
                 <View style={styles.lifePosChallanger}>
@@ -306,10 +385,9 @@ export default class MyCards extends Component{
 
     renderLoadingView() {
       return (
-        <View>
-          <Text>
-              Setting up challange...
-          </Text>
+        <View style={styles.loading}>
+            <Text>Loading challange...</Text>
+            <ProgressBar color={'#FF5722'}/>
         </View>
       );
     }
