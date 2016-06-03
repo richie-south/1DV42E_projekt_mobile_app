@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, Image, View, ListView, StatusBar, AppState} from 'react-native';
+import {AppRegistry, StyleSheet, Text, Image, View, ListView, StatusBar, AppState, ToastAndroid} from 'react-native';
 import ProgressBar from 'ProgressBarAndroid';
 
 import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -33,12 +33,11 @@ const connectSocket = () => {
 };
 
 socket.on('connect', () => {
-    //console.log('id1: ', socket.io.engine.id);
+    console.log('socket connect');
 });
 
 socket.on('disconnect', () => {
     console.log('socket disconnect');
-    //console.log('id1: ', socket.io.engine.id);
 });
 
 export default class MyCards extends Component{
@@ -134,7 +133,7 @@ export default class MyCards extends Component{
         let ownCards = this.state.myCardsList
             .filter(c => {
         		if(c._id.toString() === card._id.toString()){
-        			this.onRemoveLobbyCard(card);
+                    ToastAndroid.show('Cant play against self.', ToastAndroid.SHORT);
                     return true;
         		}
         	});
