@@ -10,6 +10,8 @@ Repot har till dels använt waffle.io som kanban [länk](https://waffle.io/rs222
 
 Det finns ingen färdig apk som man kan installera på telefonen utan man behöver följa installations anvisnigarna. Detta pågrund av react native problem.
 
+Appen måste köras på en android telefon eller viturell maskin med android 6.0
+
 ## Installations anvisnigar
 
 - Ladda ned repot
