@@ -99,7 +99,7 @@ export default class Login extends Component{
                               console.log('Logged in!: ', data);
                               userDAL.getUserCredentials(data.profile.id)
                               .then(result => {
-                                  if(result === null){
+                                  if(result === 404){
                                       userDAL.getFbProfileImageUrl(data.profile.id, data.token)
                                           .then(imageData =>
                                               userDAL.createNewUser(
@@ -117,6 +117,8 @@ export default class Login extends Component{
                                               console.log(e);
                                           });
                                   }else {
+                                      console.log(result);
+                                      console.log('heheheh detta stämmer ju inte');
                                       asyncStorageDAL.saveUserProps(result)
                                         .then(a => Actions.mycards({ data:result }))
                                         .catch(e => console.log('saveUserProps error: ', e));
