@@ -1,14 +1,20 @@
 # 1DV42E_projekt_mobile_app
+
+codename: 'IvyTown'
+
 react native mobile app of 1dv42e projekt.
 
 Repot har till dels använt waffle.io som kanban [länk](https://waffle.io/rs222kn/1DV42E_projekt_mobile_app)
 
 ****
 
+Det finns ingen färdig apk som man kan installera på telefonen utan man behöver följa installations anvisnigarna.
+
 ## Installations anvisnigar
 
 - Ladda ned repot
-- Följ Facebooks installations anvinsingar för [react native](http://facebook.github.io/react-native/releases/0.25/docs/getting-started.html#content)
+- Följ Facebooks installations anvinsingar för [react native](http://facebook.github.io/react-native/releases/0.25/docs/getting-started.html#content).
+Installera version 0.25 och inget senare
 - Gå in i mappen 'IvyTown'
 - Kör 'npm install'
 - Byt namn på filen 'config_setup.js' till 'config.js'
@@ -16,6 +22,10 @@ Repot har till dels använt waffle.io som kanban [länk](https://waffle.io/rs222
 - Starta din virtuella android maskin
 - När det har laddat klart kör 'react-native run-android'
 - Nu ska appen startas i din virtuella android maskin
+- Öppna react native menyn i appen
+- Klicka på 'Dev Settings'
+- Bocka ut 'JS Dev Mode'
+- Ladda om appen
 
 ****
 
@@ -33,6 +43,18 @@ https://docs.google.com/spreadsheets/d/1koLFltN6xg1eqNhEY9T1Zkwmz9nrppbZ1mA_Vy0S
 ## Teknisk dokumentation
 
 https://docs.google.com/document/d/1UZCFuSxNWdxrpGUAFMH5-JAab8bOmUCOS--H3QFLWOA/edit?usp=sharing
+
+
+
+****
+
+## Kända problem / ej implementerade funktioner
+
+- Man kan bara spela en spel runda utav 3
+- Om man vinner någon annans huvud användarkort så försvinner det från användaren och användaren har kanske inget kort kvar att spela med
+    - kortet ska splitas i 2
+- Flera animationer så man förstår vad som händer
+- Tutorial för spelet
 
 
 ****
@@ -56,9 +78,6 @@ https://docs.google.com/document/d/1UZCFuSxNWdxrpGUAFMH5-JAab8bOmUCOS--H3QFLWOA/
 **Card design**
 
 <img src="https://raw.githubusercontent.com/rs222kn/1DV42E_projekt_mobile_app/master/Concept/Design_mock_v3.png" width="800">
-
-
-
 
 **Icon design mock 1**
 
