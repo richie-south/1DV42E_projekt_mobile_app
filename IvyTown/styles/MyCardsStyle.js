@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {StyleSheet} from 'react-native';
-//const colors = ['#FF5722', '#4CAF50', '#00BCD4', '#2196F3', '#E91E63', '#9C27B0'];
 
 export default StyleSheet.create({
     container: {
