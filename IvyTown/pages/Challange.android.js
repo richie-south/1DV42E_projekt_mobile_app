@@ -274,7 +274,7 @@ export default class MyCards extends Component{
 
                     this.setState(newState);
                     i++;
-                }, 1500);
+                }, 3000);
 
                 setTimeout(() => {
                     console.log(this.state);
